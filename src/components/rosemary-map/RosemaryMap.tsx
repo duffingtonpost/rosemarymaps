@@ -122,25 +122,27 @@ export default function RosemaryMap({
             icon={rosemaryIcon}
           >
             <Popup>
-              {location.photoUrl && (
-                <div className={styles.popupImageWrapper}>
-                  <Image
-                    src={location.photoUrl}
-                    alt={`Photo of ${location.name}`}
-                    fill
-                    className={styles.popupImage}
-                  />
-                </div>
-              )}
-              <strong>{location.name}</strong>
-              {location.description && <p className={styles.popupDescription}>{location.description}</p>}
-              <p className={styles.popupMeta}>
-                Added on {new Date(location.added_at).toLocaleDateString(undefined, {
-                  year: "numeric",
-                  month: "short",
-                  day: "numeric",
-                })}
-              </p>
+              <div className={styles.popupContent}>
+                {location.photoUrl && (
+                  <div className={styles.popupImageWrapper}>
+                    <Image
+                      src={location.photoUrl}
+                      alt={`Photo of ${location.name}`}
+                      fill
+                      className={styles.popupImage}
+                    />
+                  </div>
+                )}
+                <h3 className={styles.popupTitle}>{location.name}</h3>
+                {location.description && <p className={styles.popupDescription}>{location.description}</p>}
+                <p className={styles.popupMeta}>
+                  Added on {new Date(location.added_at).toLocaleDateString(undefined, {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                  })}
+                </p>
+              </div>
             </Popup>
           </Marker>
         ))}
