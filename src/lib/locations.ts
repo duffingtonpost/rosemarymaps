@@ -1,46 +1,51 @@
-import { getDb, type LocationRecord } from "@/lib/db";
+import { supabase } from "@/lib/supabase";
 
 export type NewLocation = {
   name: string;
   description?: string;
   latitude: number;
   longitude: number;
-  photoPath?: string | null;
+  photoUrl?: string | null;
 };
 
-const selectableFields = `
-  id,
-  name,
-  description,
-  latitude,
-  longitude,
-  added_at,
-  photo_path
-`;
+export type LocationRecord = {
+  id: number;
+  name: string;
+  description: string | null;
+  latitude: number;
+  longitude: number;
+  photo_url: string | null;
+  inserted_at: string;
+};
 
-export function listLocations(): LocationRecord[] {
-  const db = getDb();
-  const stmt = db.prepare(`SELECT ${selectableFields} FROM locations ORDER BY added_at DESC`);
-  return stmt.all() as LocationRecord[];
+const tableName = "rosemary_locations";
+
+export async function listLocations(): Promise<LocationRecord[]> {
+  const { data, error } = await supabase.from(tableName).select("*").order("inserted_at", { ascending: false });
+  if (error) {
+    console.error("Failed to list locations", error);
+    throw error;
+  }
+  return data ?? [];
 }
 
-export function createLocation(newLocation: NewLocation): LocationRecord {
-  const db = getDb();
-  const insert = db.prepare(
-    `
-      INSERT INTO locations (name, description, latitude, longitude, photo_path)
-      VALUES (@name, @description, @latitude, @longitude, @photo_path)
-    `,
-  );
+export async function createLocation(newLocation: NewLocation): Promise<LocationRecord> {
+  const { data, error } = await supabase
+    .from(tableName)
+    .insert({
+      name: newLocation.name,
+      description: newLocation.description ?? null,
+      latitude: newLocation.latitude,
+      longitude: newLocation.longitude,
+      photo_url: newLocation.photoUrl ?? null,
+    })
+    .select()
+    .single();
 
-  const result = insert.run({
-    name: newLocation.name,
-    description: newLocation.description ?? null,
-    latitude: newLocation.latitude,
-    longitude: newLocation.longitude,
-    photo_path: newLocation.photoPath ?? null,
-  });
+  if (error) {
+    console.error("Failed to create location", error);
+    throw error;
+  }
 
-  const lookup = db.prepare(`SELECT ${selectableFields} FROM locations WHERE id = ?`);
-  return lookup.get(result.lastInsertRowid) as LocationRecord;
+  return data;
 }

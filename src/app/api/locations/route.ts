@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import crypto from "crypto";
-import fs from "fs";
-import path from "path";
+import { v4 as uuidv4 } from "uuid";
 
 import { createLocation, listLocations } from "@/lib/locations";
+import { supabase } from "@/lib/supabase";
 import { locationInputSchema } from "@/lib/validation";
+
+const PHOTO_BUCKET = "rosemary-photos";
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -12,9 +13,15 @@ export async function GET(request: NextRequest) {
   const lng = searchParams.get("lng");
   const radiusParam = searchParams.get("radius");
 
-  const locations = listLocations().map(({ photo_path, ...rest }) => ({
-    ...rest,
-    photoUrl: photo_path ? `/${photo_path}` : null,
+  const records = await listLocations();
+  const locations = records.map((record) => ({
+    id: record.id,
+    name: record.name,
+    description: record.description,
+    latitude: record.latitude,
+    longitude: record.longitude,
+    added_at: record.inserted_at,
+    photoUrl: record.photo_url,
   }));
 
   if (lat && lng && radiusParam) {
@@ -59,29 +66,54 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    let photoPath: string | null = null;
+    let photoUrl: string | null = null;
     const photo = formData.get("photo");
     if (photo && typeof photo === "object" && "arrayBuffer" in photo && photo.size > 0) {
       const arrayBuffer = await photo.arrayBuffer();
       const buffer = Buffer.from(arrayBuffer);
-      const uploadsDir = path.join(process.cwd(), "public", "uploads");
-      fs.mkdirSync(uploadsDir, { recursive: true });
-      const extension = path.extname(photo.name) || ".jpg";
-      const filename = `${crypto.randomUUID()}${extension}`;
-      const targetPath = path.join(uploadsDir, filename);
-      fs.writeFileSync(targetPath, buffer);
-      photoPath = path.posix.join("uploads", filename);
+      const extension = photo.name.split(".").pop() ?? "jpg";
+      const objectPath = `photos/${uuidv4()}.${extension}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from(PHOTO_BUCKET)
+        .upload(objectPath, buffer, {
+          contentType: photo.type || "image/jpeg",
+          upsert: false,
+        });
+
+      if (uploadError?.message.includes("bucket not found")) {
+        await supabase.storage.createBucket(PHOTO_BUCKET, { public: true });
+        const retry = await supabase.storage
+          .from(PHOTO_BUCKET)
+          .upload(objectPath, buffer, {
+            contentType: photo.type || "image/jpeg",
+            upsert: false,
+          });
+        if (retry.error) {
+          console.error("Failed to upload photo to Supabase", retry.error);
+          return NextResponse.json({ error: "Unable to upload photo" }, { status: 500 });
+        }
+      } else if (uploadError) {
+        console.error("Failed to upload photo to Supabase", uploadError);
+        return NextResponse.json({ error: "Unable to upload photo" }, { status: 500 });
+      }
+
+      const { data: publicUrlData } = supabase.storage.from(PHOTO_BUCKET).getPublicUrl(objectPath);
+      photoUrl = publicUrlData.publicUrl;
     }
 
-    const record = createLocation({ ...parsed.data, photoPath });
-
-    const { photo_path, ...rest } = record;
+    const record = await createLocation({ ...parsed.data, photoUrl });
 
     return NextResponse.json(
       {
         location: {
-          ...rest,
-          photoUrl: photo_path ? `/${photo_path}` : null,
+          id: record.id,
+          name: record.name,
+          description: record.description,
+          latitude: record.latitude,
+          longitude: record.longitude,
+          added_at: record.inserted_at,
+          photoUrl: record.photo_url,
         },
       },
       { status: 201 },
@@ -102,15 +134,18 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const record = createLocation(parsed.data);
-
-  const { photo_path, ...rest } = record;
+  const record = await createLocation(parsed.data);
 
   return NextResponse.json(
     {
       location: {
-        ...rest,
-        photoUrl: photo_path ? `/${photo_path}` : null,
+        id: record.id,
+        name: record.name,
+        description: record.description,
+        latitude: record.latitude,
+        longitude: record.longitude,
+        added_at: record.inserted_at,
+        photoUrl: record.photo_url,
       },
     },
     { status: 201 },
