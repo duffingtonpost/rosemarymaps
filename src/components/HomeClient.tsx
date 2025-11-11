@@ -59,6 +59,7 @@ export default function HomeClient() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [geolocationAvailable, setGeolocationAvailable] = useState(false);
   const [geolocationError, setGeolocationError] = useState<string | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     if (!("geolocation" in navigator)) {
@@ -170,6 +171,7 @@ export default function HomeClient() {
 
         await mutate();
         setSelectedCoords(null);
+        setIsModalOpen(false);
         setIsSubmitting(false);
       } catch (err) {
         console.error(err);
@@ -184,7 +186,7 @@ export default function HomeClient() {
 
   return (
     <>
-      <TopNav />
+      <TopNav onAddClick={() => setIsModalOpen(true)} />
       <div className={styles.pageLayout}>
         <div className={styles.inventoryColumn}>
           <header className={styles.sectionIntro}>
@@ -199,12 +201,7 @@ export default function HomeClient() {
               <div className={styles.emptyState}>
                 <h3>No rosemary yet</h3>
                 <p>Be the first to add a public rosemary plant in your neighborhood.</p>
-                <button
-                  type="button"
-                  onClick={() => {
-                    document.getElementById("add-rosemary")?.scrollIntoView({ behavior: "smooth" });
-                  }}
-                >
+                <button type="button" onClick={() => setIsModalOpen(true)}>
                   Add a rosemary spot
                 </button>
               </div>
@@ -280,20 +277,6 @@ export default function HomeClient() {
                );
              })}
           </div>
-          <section className={styles.addCard} id="add-rosemary">
-            <div className={styles.addCardHeader}>
-              <h2>Share a rosemary spot</h2>
-              <p>Drop a pin, add a photo, and tell others how to find it.</p>
-            </div>
-            <AddLocationForm
-              onSubmit={handleAddLocation}
-              submitting={isSubmitting}
-              coordinates={formCoordinates}
-              canUseCurrentLocation={geolocationAvailable}
-              onUseCurrentLocation={handleUseCurrentLocation}
-              geoError={geolocationError}
-            />
-          </section>
         </div>
         <div className={styles.mapColumn}>
           <div className={styles.mapShell}>
@@ -306,6 +289,32 @@ export default function HomeClient() {
           </div>
         </div>
       </div>
+      {isModalOpen && (
+        <div className={styles.modalOverlay} onClick={() => setIsModalOpen(false)}>
+          <div
+            className={styles.modalContent}
+            onClick={(event) => event.stopPropagation()}
+            role="dialog"
+            aria-modal="true"
+          >
+            <div className={styles.modalHeader}>
+              <h2>Share a rosemary spot</h2>
+              <button type="button" onClick={() => setIsModalOpen(false)} aria-label="Close modal">
+                ×
+              </button>
+            </div>
+            <AddLocationForm
+              onSubmit={handleAddLocation}
+              submitting={isSubmitting}
+              coordinates={formCoordinates}
+              onCancel={() => setIsModalOpen(false)}
+              canUseCurrentLocation={geolocationAvailable}
+              onUseCurrentLocation={handleUseCurrentLocation}
+              geoError={geolocationError}
+            />
+          </div>
+        </div>
+      )}
     </>
   );
 }

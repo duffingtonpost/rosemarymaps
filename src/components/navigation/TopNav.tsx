@@ -1,6 +1,10 @@
 import styles from "@/components/navigation/TopNav.module.css";
 
-export default function TopNav() {
+type TopNavProps = {
+  onAddClick: () => void;
+};
+
+export default function TopNav({ onAddClick }: TopNavProps) {
   return (
     <header className={styles.root}>
       <div className={styles.logoGroup}>
@@ -16,15 +20,8 @@ export default function TopNav() {
         <span className={styles.searchIcon}>🔍</span>
       </button>
       <div className={styles.actions}>
-        <button className={styles.actionLink} type="button">
-          Share a plant
-        </button>
-        <button className={styles.iconButton} type="button" aria-label="Change language">
-          🌐
-        </button>
-        <button className={styles.profileButton} type="button" aria-label="Account menu">
-          <span className={styles.menuIcon}>☰</span>
-          <span className={styles.userAvatar}>🙂</span>
+        <button className={styles.ctaButton} type="button" onClick={onAddClick}>
+          Share a rosemary spot
         </button>
       </div>
     </header>

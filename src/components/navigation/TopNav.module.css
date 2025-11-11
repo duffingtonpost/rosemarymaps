@@ -81,47 +81,23 @@
 .actions {
   display: inline-flex;
   align-items: center;
-  gap: 1rem;
 }
 
-.actionLink {
+.ctaButton {
   border: none;
-  background: transparent;
-  font-weight: 600;
-  color: #0f172a;
-  cursor: pointer;
-}
-
-.iconButton {
-  border: none;
-  background: transparent;
-  font-size: 1.1rem;
-  cursor: pointer;
-}
-
-.profileButton {
-  border: 1px solid rgba(148, 163, 184, 0.4);
   border-radius: 9999px;
-  padding: 0.35rem 0.65rem 0.35rem 0.5rem;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  background: #ffffff;
+  padding: 0.6rem 1.4rem;
+  font-weight: 600;
+  background: #14532d;
+  color: #ffffff;
   cursor: pointer;
+  box-shadow: 0 8px 18px rgba(20, 83, 45, 0.25);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.menuIcon {
-  font-size: 0.95rem;
-}
-
-.userAvatar {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: #ecfeff;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+.ctaButton:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(20, 83, 45, 0.3);
 }
 
 @media (max-width: 960px) {
@@ -132,5 +108,9 @@
 
   .searchPill {
     display: none;
+  }
+
+  .ctaButton {
+    padding: 0.55rem 1rem;
   }
 }
