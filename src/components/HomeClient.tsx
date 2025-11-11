@@ -56,7 +56,6 @@ export default function HomeClient() {
 
   const [userCoords, setUserCoords] = useState<Coordinates | null>(null);
   const [selectedCoords, setSelectedCoords] = useState<Coordinates | null>(null);
-  const [isFormOpen, setIsFormOpen] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [geolocationAvailable, setGeolocationAvailable] = useState(false);
   const [geolocationError, setGeolocationError] = useState<string | null>(null);
@@ -106,13 +105,13 @@ export default function HomeClient() {
 
   const handleMapClick = useCallback((coords: Coordinates) => {
     setSelectedCoords(coords);
-    setIsFormOpen(true);
+    // setIsFormOpen(true); // Removed as per edit hint
   }, []);
 
   const handleUseCurrentLocation = useCallback(() => {
     if (userCoords) {
       setSelectedCoords(userCoords);
-      setIsFormOpen(true);
+      // setIsFormOpen(true); // Removed as per edit hint
       setGeolocationError(null);
       return;
     }
@@ -127,7 +126,7 @@ export default function HomeClient() {
         const coords: Coordinates = [position.coords.latitude, position.coords.longitude];
         setUserCoords(coords);
         setSelectedCoords(coords);
-        setIsFormOpen(true);
+        // setIsFormOpen(true); // Removed as per edit hint
         setGeolocationError(null);
       },
       (error) => {
@@ -186,23 +185,30 @@ export default function HomeClient() {
   return (
     <>
       <TopNav />
-      <div className={styles.container}>
-        <section className={styles.mapSection}>
-          <RosemaryMap
-            locations={data?.locations ?? []}
-            userLocation={userCoords}
-            onMapClick={handleMapClick}
-            highlightCoords={selectedCoords}
-          />
-        </section>
-        <section className={styles.panel}>
-          <h2>Nearby rosemary</h2>
-          {error && <p className={styles.error}>Could not load locations. Please refresh.</p>}
-          {isLoading && <p>Loading rosemary near you...</p>}
-          {!isLoading && sortedLocations.length === 0 && (
-            <p>No rosemary spots yet. Be the first to add one!</p>
-          )}
-          <ul className={styles.locationList}>
+      <div className={styles.pageLayout}>
+        <div className={styles.inventoryColumn}>
+          <header className={styles.sectionIntro}>
+            <h1>{sortedLocations.length > 0 ? `${sortedLocations.length} rosemary spots nearby` : "Find rosemary near you"}</h1>
+            <p>
+              Browse community-shared rosemary plants. Click a card to focus the map or grab directions for a quick
+              harvest.
+            </p>
+          </header>
+          <div className={styles.cardGrid}>
+            {sortedLocations.length === 0 && !isLoading && !error && (
+              <div className={styles.emptyState}>
+                <h3>No rosemary yet</h3>
+                <p>Be the first to add a public rosemary plant in your neighborhood.</p>
+                <button
+                  type="button"
+                  onClick={() => {
+                    document.getElementById("add-rosemary")?.scrollIntoView({ behavior: "smooth" });
+                  }}
+                >
+                  Add a rosemary spot
+                </button>
+              </div>
+            )}
             {sortedLocations.map((location) => {
               const distanceKm = toDistanceInKm(userCoords, [location.latitude, location.longitude]);
               const distanceLabel =
@@ -214,29 +220,43 @@ export default function HomeClient() {
                 directionsUrl.searchParams.set("origin", `${userCoords[0]},${userCoords[1]}`);
               }
               return (
-                <li key={location.id} className={styles.locationItem}>
+                <article
+                  key={location.id}
+                  className={styles.locationCard}
+                  onClick={() => setSelectedCoords([location.latitude, location.longitude])}
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter" || event.key === " ") {
+                      event.preventDefault();
+                      setSelectedCoords([location.latitude, location.longitude]);
+                    }
+                  }}
+                  role="button"
+                  tabIndex={0}
+                >
                   {location.photoUrl && (
-                    <div className={styles.locationImageWrapper}>
+                    <div className={styles.cardImageWrapper}>
                       <Image
                         src={location.photoUrl}
                         alt={`Photo of ${location.name}`}
                         fill
-                        className={styles.locationImage}
+                        className={styles.cardImage}
                       />
                     </div>
                   )}
-                  <div className={styles.locationHeading}>
-                    <strong>{location.name}</strong>
-                    <span className={styles.locationDistance}>{distanceLabel}</span>
+                  <div className={styles.cardBody}>
+                    <div className={styles.cardHeading}>
+                      <h3>{location.name}</h3>
+                      <span>{distanceLabel}</span>
+                    </div>
+                    {location.description && <p>{location.description}</p>}
                   </div>
-                  {location.description && (
-                    <p className={styles.locationDescription}>{location.description}</p>
-                  )}
-                  <div className={styles.locationActions}>
+                  <div className={styles.cardFooter}>
                     <button
                       type="button"
-                      className={styles.focusButton}
-                      onClick={() => setSelectedCoords([location.latitude, location.longitude])}
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        setSelectedCoords([location.latitude, location.longitude]);
+                      }}
                     >
                       Show on map
                     </button>
@@ -244,37 +264,40 @@ export default function HomeClient() {
                       href={directionsUrl.toString()}
                       target="_blank"
                       rel="noreferrer"
-                      className={styles.directionLink}
+                      onClick={(event) => event.stopPropagation()}
                     >
-                      Get directions
+                      Directions
                     </a>
                   </div>
-                </li>
+                </article>
               );
             })}
-          </ul>
-        </section>
-        <section className={styles.panel}>
-          <h2>Add a rosemary spot</h2>
-          <p className={styles.panelHint}>
-            Tap the map or use your current location to drop a pin, then share tips so others can enjoy the plant.
-          </p>
-          {isFormOpen ? (
+          </div>
+          <section className={styles.addCard} id="add-rosemary">
+            <div className={styles.addCardHeader}>
+              <h2>Share a rosemary spot</h2>
+              <p>Drop a pin, add a photo, and tell others how to find it.</p>
+            </div>
             <AddLocationForm
               onSubmit={handleAddLocation}
               submitting={isSubmitting}
               coordinates={formCoordinates}
-              onCancel={() => setIsFormOpen(false)}
               canUseCurrentLocation={geolocationAvailable}
               onUseCurrentLocation={handleUseCurrentLocation}
               geoError={geolocationError}
             />
-          ) : (
-            <button type="button" className={styles.inlineAddButton} onClick={() => setIsFormOpen(true)}>
-              Open add form
-            </button>
-          )}
-        </section>
+          </section>
+        </div>
+        <div className={styles.mapColumn}>
+          <div className={styles.mapShell}>
+            <RosemaryMap
+              locations={data?.locations ?? []}
+              userLocation={userCoords}
+              onMapClick={handleMapClick}
+              highlightCoords={selectedCoords}
+            />
+          </div>
+        </div>
       </div>
     </>
   );

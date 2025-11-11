@@ -1,155 +1,210 @@
-.container {
+.pageLayout {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
-  padding: 1.5rem;
-  max-width: 1200px;
-  margin: 1.5rem auto 0;
+  gap: 2rem;
+  padding: 2rem 2.5rem 3rem;
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
-.mapSection {
-  flex: 2;
-  background: #ffffff;
-  border-radius: 1rem;
-  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.1);
+.inventoryColumn {
   display: flex;
   flex-direction: column;
-  overflow: hidden;
-  border: 4px solid #0f4f3a;
+  gap: 2rem;
 }
 
-.panel {
-  background: #ffffff;
-  border-radius: 1rem;
-  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
-  padding: 1.5rem;
-  width: 100%;
-}
-
-.panel h2 {
-  margin-top: 0;
-  margin-bottom: 0.75rem;
-  font-size: 1.25rem;
+.sectionIntro h1 {
+  margin: 0;
+  font-size: 1.8rem;
   color: #0f172a;
 }
 
-.panelHint {
-  margin-top: 0;
-  margin-bottom: 1rem;
-  color: #64748b;
-  font-size: 0.95rem;
+.sectionIntro p {
+  margin: 0.5rem 0 0;
+  color: #475569;
+  font-size: 1rem;
 }
 
-.locationList {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.5rem;
+}
+
+.locationCard {
+  background: #ffffff;
+  border-radius: 1.25rem;
+  box-shadow: 0 15px 30px rgba(15, 23, 42, 0.12);
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  cursor: pointer;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.locationItem {
-  border: 1px solid #e2e8f0;
-  border-radius: 0.75rem;
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
+.locationCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.16);
 }
 
-.locationImageWrapper {
+.cardImageWrapper {
   position: relative;
   width: 100%;
-  padding-top: 56.25%;
-  border-radius: 0.65rem;
+  padding-top: 66%;
   overflow: hidden;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.3);
 }
 
-.locationImage {
+.cardImage {
   object-fit: cover;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.2);
 }
 
-.locationHeading {
+.cardBody {
+  padding: 1rem 1.25rem 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.cardHeading {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
   gap: 0.5rem;
 }
 
-.locationHeading strong {
-  font-size: 1.05rem;
+.cardHeading h3 {
+  margin: 0;
+  font-size: 1.1rem;
   color: #0f172a;
 }
 
-.locationDistance {
-  font-size: 0.9rem;
-  color: #475569;
-}
-
-.locationDescription {
-  margin: 0;
-  color: #475569;
+.cardHeading span {
   font-size: 0.95rem;
+  color: #475569;
 }
 
-.locationActions {
+.cardBody p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #475569;
+  line-height: 1.4;
+}
+
+.cardFooter {
   display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1.25rem 1rem;
+  border-top: 1px solid rgba(148, 163, 184, 0.18);
   gap: 0.75rem;
 }
 
-.focusButton,
-.directionLink,
-.inlineAddButton {
-  background: #f1f5f9;
+.cardFooter button,
+.cardFooter a {
+  border: none;
+  background: transparent;
+  font-weight: 600;
   color: #0f172a;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.cardFooter a {
+  color: #0f766e;
+}
+
+.emptyState {
+  grid-column: 1 / -1;
+  padding: 3rem;
+  border-radius: 1.25rem;
+  background: linear-gradient(135deg, #f1f5ec 0%, #d9e7d2 100%);
+  text-align: center;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.4);
+}
+
+.emptyState h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.5rem;
+  color: #14532d;
+}
+
+.emptyState p {
+  margin: 0 0 1.25rem;
+  color: #475569;
+}
+
+.emptyState button {
   border: none;
   border-radius: 9999px;
-  padding: 0.5rem 1rem;
+  padding: 0.65rem 1.4rem;
   font-weight: 600;
-  cursor: pointer;
-  text-decoration: none;
-  transition: background 0.2s ease;
-}
-
-.focusButton:hover,
-.inlineAddButton:hover {
-  background: #e2e8f0;
-}
-
-.directionLink {
-  display: inline-flex;
-  align-items: center;
-  background: #0f766e;
+  background: #14532d;
   color: #ffffff;
+  cursor: pointer;
 }
 
-.directionLink:hover {
-  background: #0d615b;
+.addCard {
+  background: #ffffff;
+  border-radius: 1.25rem;
+  box-shadow: 0 15px 30px rgba(15, 23, 42, 0.08);
+  padding: 1.75rem;
+  border: 1px solid rgba(148, 163, 184, 0.18);
 }
 
-.inlineAddButton {
-  width: 100%;
-  justify-content: center;
+.addCardHeader h2 {
+  margin: 0;
+  font-size: 1.4rem;
+  color: #0f172a;
 }
 
-.error {
-  color: #dc2626;
-  font-weight: 600;
+.addCardHeader p {
+  margin: 0.35rem 0 1.25rem;
+  color: #475569;
 }
 
-@media (max-width: 960px) {
-  .directionLink,
-  .focusButton {
-    flex: 1;
-    text-align: center;
-    justify-content: center;
+.mapColumn {
+  flex: 1;
+}
+
+.mapShell {
+  position: sticky;
+  top: 6rem;
+  border-radius: 1.5rem;
+  overflow: hidden;
+  box-shadow: 0 15px 30px rgba(15, 23, 42, 0.18);
+  border: 4px solid #0f4f3a;
+  min-height: 500px;
+}
+
+@media (min-width: 1024px) {
+  .pageLayout {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .inventoryColumn {
+    flex: 1 1 58%;
+  }
+
+  .mapColumn {
+    flex: 0 0 38%;
   }
 }
 
-@media (min-width: 960px) {
-  .mapSection {
-    min-height: 70vh;
+@media (max-width: 768px) {
+  .pageLayout {
+    padding: 1.5rem 1.25rem 2.5rem;
+  }
+
+  .cardGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .mapShell {
+    position: relative;
+    top: 0;
+    min-height: 360px;
   }
 }
