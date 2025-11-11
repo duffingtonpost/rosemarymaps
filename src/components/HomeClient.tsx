@@ -244,43 +244,37 @@ export default function HomeClient() {
                      ) : (
                        <div className={styles.photoPlaceholder}>🌿</div>
                      )}
-                     <span className={styles.cardBadge}>Guest favorite</span>
-                     <button
-                       type="button"
-                       className={styles.cardFavoriteButton}
-                       onClick={(event) => event.stopPropagation()}
-                       aria-label="Save rosemary spot"
-                     >
-                       ♡
-                     </button>
                      <span className={styles.cardIndicator}>• • •</span>
                    </div>
                    <div className={styles.cardBody}>
                      <div className={styles.cardHeading}>
                        <h3>{location.name}</h3>
-                       <span className={styles.cardRating}>⭐ 4.8</span>
                      </div>
                      {location.description && <p>{location.description}</p>}
                      <span className={styles.cardSubtle}>{distanceLabel}</span>
                    </div>
                    <div className={styles.cardFooter}>
-                     <button
-                       type="button"
-                       onClick={(event) => {
-                         event.stopPropagation();
-                         setSelectedCoords([location.latitude, location.longitude]);
-                       }}
-                     >
-                       Show on map
-                     </button>
-                     <a
-                       href={directionsUrl.toString()}
-                       target="_blank"
-                       rel="noreferrer"
-                       onClick={(event) => event.stopPropagation()}
-                     >
-                       Directions
-                     </a>
+                    <button
+                      type="button"
+                      className={styles.iconPill}
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        setSelectedCoords([location.latitude, location.longitude]);
+                      }}
+                      aria-label="Show on map"
+                    >
+                      👁️
+                    </button>
+                    <a
+                      href={directionsUrl.toString()}
+                      target="_blank"
+                      rel="noreferrer"
+                      onClick={(event) => event.stopPropagation()}
+                      className={styles.iconPill}
+                      aria-label="Get directions"
+                    >
+                      ➜
+                    </a>
                    </div>
                  </article>
                );
