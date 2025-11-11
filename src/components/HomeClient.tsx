@@ -210,68 +210,81 @@ export default function HomeClient() {
               </div>
             )}
             {sortedLocations.map((location) => {
-              const distanceKm = toDistanceInKm(userCoords, [location.latitude, location.longitude]);
-              const distanceLabel =
-                distanceKm === null ? "Distance unknown" : `${distanceKm.toFixed(2)} km away`;
-              const directionsUrl = new URL("https://www.google.com/maps/dir/");
-              directionsUrl.searchParams.set("api", "1");
-              directionsUrl.searchParams.set("destination", `${location.latitude},${location.longitude}`);
-              if (userCoords) {
-                directionsUrl.searchParams.set("origin", `${userCoords[0]},${userCoords[1]}`);
-              }
-              return (
-                <article
-                  key={location.id}
-                  className={styles.locationCard}
-                  onClick={() => setSelectedCoords([location.latitude, location.longitude])}
-                  onKeyDown={(event) => {
-                    if (event.key === "Enter" || event.key === " ") {
-                      event.preventDefault();
-                      setSelectedCoords([location.latitude, location.longitude]);
-                    }
-                  }}
-                  role="button"
-                  tabIndex={0}
-                >
-                  {location.photoUrl && (
-                    <div className={styles.cardImageWrapper}>
-                      <Image
-                        src={location.photoUrl}
-                        alt={`Photo of ${location.name}`}
-                        fill
-                        className={styles.cardImage}
-                      />
-                    </div>
-                  )}
-                  <div className={styles.cardBody}>
-                    <div className={styles.cardHeading}>
-                      <h3>{location.name}</h3>
-                      <span>{distanceLabel}</span>
-                    </div>
-                    {location.description && <p>{location.description}</p>}
-                  </div>
-                  <div className={styles.cardFooter}>
-                    <button
-                      type="button"
-                      onClick={(event) => {
-                        event.stopPropagation();
-                        setSelectedCoords([location.latitude, location.longitude]);
-                      }}
-                    >
-                      Show on map
-                    </button>
-                    <a
-                      href={directionsUrl.toString()}
-                      target="_blank"
-                      rel="noreferrer"
-                      onClick={(event) => event.stopPropagation()}
-                    >
-                      Directions
-                    </a>
-                  </div>
-                </article>
-              );
-            })}
+               const distanceKm = toDistanceInKm(userCoords, [location.latitude, location.longitude]);
+               const distanceLabel =
+                 distanceKm === null ? "Distance unknown" : `${distanceKm.toFixed(2)} km away`;
+               const directionsUrl = new URL("https://www.google.com/maps/dir/");
+               directionsUrl.searchParams.set("api", "1");
+               directionsUrl.searchParams.set("destination", `${location.latitude},${location.longitude}`);
+               if (userCoords) {
+                 directionsUrl.searchParams.set("origin", `${userCoords[0]},${userCoords[1]}`);
+               }
+               return (
+                 <article
+                   key={location.id}
+                   className={styles.locationCard}
+                   onClick={() => setSelectedCoords([location.latitude, location.longitude])}
+                   onKeyDown={(event) => {
+                     if (event.key === "Enter" || event.key === " ") {
+                       event.preventDefault();
+                       setSelectedCoords([location.latitude, location.longitude]);
+                     }
+                   }}
+                   role="button"
+                   tabIndex={0}
+                 >
+                   <div className={styles.cardImageWrapper}>
+                     {location.photoUrl ? (
+                       <Image
+                         src={location.photoUrl}
+                         alt={`Photo of ${location.name}`}
+                         fill
+                         className={styles.cardImage}
+                       />
+                     ) : (
+                       <div className={styles.photoPlaceholder}>🌿</div>
+                     )}
+                     <span className={styles.cardBadge}>Guest favorite</span>
+                     <button
+                       type="button"
+                       className={styles.cardFavoriteButton}
+                       onClick={(event) => event.stopPropagation()}
+                       aria-label="Save rosemary spot"
+                     >
+                       ♡
+                     </button>
+                     <span className={styles.cardIndicator}>• • •</span>
+                   </div>
+                   <div className={styles.cardBody}>
+                     <div className={styles.cardHeading}>
+                       <h3>{location.name}</h3>
+                       <span className={styles.cardRating}>⭐ 4.8</span>
+                     </div>
+                     {location.description && <p>{location.description}</p>}
+                     <span className={styles.cardSubtle}>{distanceLabel}</span>
+                   </div>
+                   <div className={styles.cardFooter}>
+                     <button
+                       type="button"
+                       onClick={(event) => {
+                         event.stopPropagation();
+                         setSelectedCoords([location.latitude, location.longitude]);
+                       }}
+                     >
+                       Show on map
+                     </button>
+                     <a
+                       href={directionsUrl.toString()}
+                       target="_blank"
+                       rel="noreferrer"
+                       onClick={(event) => event.stopPropagation()}
+                     >
+                       Directions
+                     </a>
+                   </div>
+                 </article>
+               );
+             })}
           </div>
           <section className={styles.addCard} id="add-rosemary">
             <div className={styles.addCardHeader}>
