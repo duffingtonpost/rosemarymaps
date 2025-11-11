@@ -32,6 +32,13 @@
   cursor: pointer;
 }
 
+.helperText {
+  font-size: 0.85rem;
+  color: #64748b;
+  margin-top: 0.35rem;
+  display: inline-block;
+}
+
 .label input:focus,
 .label textarea:focus {
   border-color: #0f766e;

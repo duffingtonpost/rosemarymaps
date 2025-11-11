@@ -163,6 +163,7 @@ export default function AddLocationForm({
           onChange={handlePhotoChange}
           disabled={submitting}
         />
+        <span className={styles.helperText}>Images must be 4&nbsp;MB or smaller.</span>
         {photoPreview && (
           <div className={styles.photoPreview}>
             <Image
