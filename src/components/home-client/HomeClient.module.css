@@ -4,6 +4,7 @@
   gap: 2rem;
   padding: 2rem 2.5rem 3rem;
   max-width: 1400px;
+  margin: 0 auto;
 }
 
 .inventoryColumn {
@@ -206,7 +207,7 @@
   .mapColumn {
     position: sticky;
     top: 6rem;
-    height: calc(100vh - 6rem - 2rem);
+    height: 100vh;
   }
 
   .cardGrid {
@@ -215,7 +216,7 @@
 
   .mapShell {
     height: auto;
-    max-height: calc(100vh - 6rem - 2rem);
+    max-height: 100vh;
     aspect-ratio: 1 / 1;
   }
 }
