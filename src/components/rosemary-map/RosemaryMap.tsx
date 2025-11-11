@@ -145,7 +145,7 @@ export default function RosemaryMap({
           </Marker>
         ))}
         {highlightCoords && (
-          <CircleMarker center={highlightCoords} radius={14} pathOptions={{ color: "#be123c", fillOpacity: 0 }}>
+          <CircleMarker center={highlightCoords} radius={14} pathOptions={{ color: "#14532d", fillOpacity: 0 }}>
             <Popup>Selected location</Popup>
           </CircleMarker>
         )}
