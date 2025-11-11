@@ -187,88 +187,6 @@ export default function HomeClient() {
     <>
       <TopNav />
       <div className={styles.container}>
-        <aside className={styles.sidebar}>
-          <div className={styles.panel}>
-            <h2>Nearby rosemary</h2>
-            {error && <p className={styles.error}>Could not load locations. Please refresh.</p>}
-            {isLoading && <p>Loading rosemary near you...</p>}
-            {!isLoading && sortedLocations.length === 0 && (
-              <p>No rosemary spots yet. Be the first to add one!</p>
-            )}
-            <ul className={styles.locationList}>
-              {sortedLocations.map((location) => {
-                const distanceKm = toDistanceInKm(userCoords, [location.latitude, location.longitude]);
-                const distanceLabel =
-                  distanceKm === null ? "Distance unknown" : `${distanceKm.toFixed(2)} km away`;
-                const directionsUrl = new URL("https://www.google.com/maps/dir/");
-                directionsUrl.searchParams.set("api", "1");
-                directionsUrl.searchParams.set("destination", `${location.latitude},${location.longitude}`);
-                if (userCoords) {
-                  directionsUrl.searchParams.set("origin", `${userCoords[0]},${userCoords[1]}`);
-                }
-                return (
-                  <li key={location.id} className={styles.locationItem}>
-                    {location.photoUrl && (
-                      <div className={styles.locationImageWrapper}>
-                        <Image
-                          src={location.photoUrl}
-                          alt={`Photo of ${location.name}`}
-                          fill
-                          className={styles.locationImage}
-                        />
-                      </div>
-                    )}
-                    <div className={styles.locationHeading}>
-                      <strong>{location.name}</strong>
-                      <span className={styles.locationDistance}>{distanceLabel}</span>
-                    </div>
-                    {location.description && (
-                      <p className={styles.locationDescription}>{location.description}</p>
-                    )}
-                    <div className={styles.locationActions}>
-                      <button
-                        type="button"
-                        className={styles.focusButton}
-                        onClick={() => setSelectedCoords([location.latitude, location.longitude])}
-                      >
-                        Show on map
-                      </button>
-                      <a
-                        href={directionsUrl.toString()}
-                        target="_blank"
-                        rel="noreferrer"
-                        className={styles.directionLink}
-                      >
-                        Get directions
-                      </a>
-                    </div>
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-          <div className={styles.panel}>
-            <h2>Add a rosemary spot</h2>
-            <p className={styles.panelHint}>
-              Tap the map or use your current location to drop a pin, then share tips so others can enjoy the plant.
-            </p>
-            {isFormOpen ? (
-              <AddLocationForm
-                onSubmit={handleAddLocation}
-                submitting={isSubmitting}
-                coordinates={formCoordinates}
-                onCancel={() => setIsFormOpen(false)}
-                canUseCurrentLocation={geolocationAvailable}
-                onUseCurrentLocation={handleUseCurrentLocation}
-                geoError={geolocationError}
-              />
-            ) : (
-              <button type="button" className={styles.inlineAddButton} onClick={() => setIsFormOpen(true)}>
-                Open add form
-              </button>
-            )}
-          </div>
-        </aside>
         <section className={styles.mapSection}>
           <RosemaryMap
             locations={data?.locations ?? []}
@@ -276,6 +194,86 @@ export default function HomeClient() {
             onMapClick={handleMapClick}
             highlightCoords={selectedCoords}
           />
+        </section>
+        <section className={styles.panel}>
+          <h2>Nearby rosemary</h2>
+          {error && <p className={styles.error}>Could not load locations. Please refresh.</p>}
+          {isLoading && <p>Loading rosemary near you...</p>}
+          {!isLoading && sortedLocations.length === 0 && (
+            <p>No rosemary spots yet. Be the first to add one!</p>
+          )}
+          <ul className={styles.locationList}>
+            {sortedLocations.map((location) => {
+              const distanceKm = toDistanceInKm(userCoords, [location.latitude, location.longitude]);
+              const distanceLabel =
+                distanceKm === null ? "Distance unknown" : `${distanceKm.toFixed(2)} km away`;
+              const directionsUrl = new URL("https://www.google.com/maps/dir/");
+              directionsUrl.searchParams.set("api", "1");
+              directionsUrl.searchParams.set("destination", `${location.latitude},${location.longitude}`);
+              if (userCoords) {
+                directionsUrl.searchParams.set("origin", `${userCoords[0]},${userCoords[1]}`);
+              }
+              return (
+                <li key={location.id} className={styles.locationItem}>
+                  {location.photoUrl && (
+                    <div className={styles.locationImageWrapper}>
+                      <Image
+                        src={location.photoUrl}
+                        alt={`Photo of ${location.name}`}
+                        fill
+                        className={styles.locationImage}
+                      />
+                    </div>
+                  )}
+                  <div className={styles.locationHeading}>
+                    <strong>{location.name}</strong>
+                    <span className={styles.locationDistance}>{distanceLabel}</span>
+                  </div>
+                  {location.description && (
+                    <p className={styles.locationDescription}>{location.description}</p>
+                  )}
+                  <div className={styles.locationActions}>
+                    <button
+                      type="button"
+                      className={styles.focusButton}
+                      onClick={() => setSelectedCoords([location.latitude, location.longitude])}
+                    >
+                      Show on map
+                    </button>
+                    <a
+                      href={directionsUrl.toString()}
+                      target="_blank"
+                      rel="noreferrer"
+                      className={styles.directionLink}
+                    >
+                      Get directions
+                    </a>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+        </section>
+        <section className={styles.panel}>
+          <h2>Add a rosemary spot</h2>
+          <p className={styles.panelHint}>
+            Tap the map or use your current location to drop a pin, then share tips so others can enjoy the plant.
+          </p>
+          {isFormOpen ? (
+            <AddLocationForm
+              onSubmit={handleAddLocation}
+              submitting={isSubmitting}
+              coordinates={formCoordinates}
+              onCancel={() => setIsFormOpen(false)}
+              canUseCurrentLocation={geolocationAvailable}
+              onUseCurrentLocation={handleUseCurrentLocation}
+              geoError={geolocationError}
+            />
+          ) : (
+            <button type="button" className={styles.inlineAddButton} onClick={() => setIsFormOpen(true)}>
+              Open add form
+            </button>
+          )}
         </section>
       </div>
     </>
