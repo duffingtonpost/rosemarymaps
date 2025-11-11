@@ -1,0 +1,177 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  max-width: 1200px;
+  margin: 1.5rem auto 0;
+}
+
+.mapSection {
+  flex: 2;
+  background: #ffffff;
+  border-radius: 1rem;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.1);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.sidebar {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.panel {
+  background: #ffffff;
+  border-radius: 1rem;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+  padding: 1.5rem;
+}
+
+.panel h2 {
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+  font-size: 1.25rem;
+  color: #0f172a;
+}
+
+.panelHint {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: #64748b;
+  font-size: 0.95rem;
+}
+
+.locationList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.locationItem {
+  border: 1px solid #e2e8f0;
+  border-radius: 0.75rem;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.locationImageWrapper {
+  position: relative;
+  width: 100%;
+  padding-top: 56.25%;
+  border-radius: 0.65rem;
+  overflow: hidden;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.3);
+}
+
+.locationImage {
+  object-fit: cover;
+}
+
+.locationHeading {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.locationHeading strong {
+  font-size: 1.05rem;
+  color: #0f172a;
+}
+
+.locationDistance {
+  font-size: 0.9rem;
+  color: #475569;
+}
+
+.locationDescription {
+  margin: 0;
+  color: #475569;
+  font-size: 0.95rem;
+}
+
+.locationActions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.focusButton,
+.directionLink,
+.inlineAddButton {
+  background: #f1f5f9;
+  color: #0f172a;
+  border: none;
+  border-radius: 9999px;
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.2s ease;
+}
+
+.focusButton:hover,
+.inlineAddButton:hover {
+  background: #e2e8f0;
+}
+
+.directionLink {
+  display: inline-flex;
+  align-items: center;
+  background: #0f766e;
+  color: #ffffff;
+}
+
+.directionLink:hover {
+  background: #0d615b;
+}
+
+.inlineAddButton {
+  width: 100%;
+  justify-content: center;
+}
+
+.error {
+  color: #dc2626;
+  font-weight: 600;
+}
+
+@media (max-width: 960px) {
+  .mapHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .directionLink,
+  .focusButton {
+    flex: 1;
+    text-align: center;
+    justify-content: center;
+  }
+}
+
+@media (min-width: 960px) {
+  .container {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .mapSection {
+    min-height: 70vh;
+  }
+
+  .sidebar {
+    position: sticky;
+    top: 1.5rem;
+    max-height: calc(100vh - 3rem);
+    overflow-y: auto;
+  }
+}
