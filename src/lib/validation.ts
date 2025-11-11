@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const locationInputSchema = z.object({
   name: z
-    .string({ required_error: "Name is required" })
+    .string()
     .trim()
     .min(1, "Name is required")
     .max(100, "Name must be 100 characters or fewer"),
@@ -13,11 +13,11 @@ export const locationInputSchema = z.object({
     .optional()
     .or(z.literal("").transform(() => undefined)),
   latitude: z
-    .coerce.number({ invalid_type_error: "Latitude must be a number" })
+    .coerce.number()
     .min(-90, "Latitude must be between -90 and 90")
     .max(90, "Latitude must be between -90 and 90"),
   longitude: z
-    .coerce.number({ invalid_type_error: "Longitude must be a number" })
+    .coerce.number()
     .min(-180, "Longitude must be between -180 and 180")
     .max(180, "Longitude must be between -180 and 180"),
 });
