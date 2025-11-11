@@ -180,20 +180,30 @@
 
 @media (min-width: 1024px) {
   .pageLayout {
-    flex-direction: row;
-    align-items: flex-start;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(360px, 38%);
+    align-items: start;
   }
 
   .inventoryColumn {
-    flex: 1 1 58%;
+    max-height: calc(100vh - 7rem);
+    overflow-y: auto;
+    padding-right: 1rem;
   }
 
   .mapColumn {
-    flex: 0 0 38%;
+    position: sticky;
+    top: 6rem;
+    height: calc(100vh - 6rem - 2rem);
   }
 
   .cardGrid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .mapShell {
+    height: 100%;
+    min-height: 0;
   }
 }
 
