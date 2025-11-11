@@ -193,7 +193,7 @@
 @media (min-width: 1024px) {
   .pageLayout {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(360px, 38%);
+    grid-template-columns: minmax(0, 1fr) minmax(420px, 45%);
     align-items: start;
   }
 
@@ -216,6 +216,7 @@
   .mapShell {
     height: auto;
     max-height: calc(100vh - 6rem - 2rem);
+    aspect-ratio: 1 / 1;
   }
 }
 
