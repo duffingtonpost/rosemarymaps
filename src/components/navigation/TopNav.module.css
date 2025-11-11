@@ -7,7 +7,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 2rem;
+  gap: 1rem;
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(18px);
   border-bottom: 1px solid rgba(148, 163, 184, 0.2);
@@ -28,54 +28,6 @@
 .logoText {
   font-size: 1.2rem;
   color: #14532d;
-}
-
-.searchPill {
-  border: 1px solid rgba(148, 163, 184, 0.4);
-  border-radius: 9999px;
-  padding: 0.5rem 1rem;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.75rem;
-  background: #ffffff;
-  cursor: pointer;
-  font-weight: 600;
-  color: #0f172a;
-  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
-  transition: box-shadow 0.2s ease, transform 0.2s ease;
-}
-
-.searchPill:hover {
-  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.12);
-  transform: translateY(-1px);
-}
-
-.searchPrimary {
-  min-width: 96px;
-}
-
-.searchSecondary,
-.searchHint {
-  font-weight: 500;
-  color: #475569;
-}
-
-.searchDivider {
-  width: 1px;
-  height: 20px;
-  background: rgba(148, 163, 184, 0.4);
-}
-
-.searchIcon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 9999px;
-  background: #dc2626;
-  color: #ffffff;
-  font-size: 0.9rem;
 }
 
 .actions {
@@ -103,11 +55,6 @@
 @media (max-width: 960px) {
   .root {
     padding: 0.75rem 1rem;
-    gap: 1rem;
-  }
-
-  .searchPill {
-    display: none;
   }
 
   .ctaButton {
