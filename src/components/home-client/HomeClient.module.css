@@ -207,7 +207,7 @@
   .mapColumn {
     position: sticky;
     top: 6rem;
-    height: 100vh;
+    height: calc(100vh - 3rem);
   }
 
   .cardGrid {
