@@ -181,13 +181,15 @@
 }
 
 .mapShell {
-  position: sticky;
+  position: fixed;
   top: 6rem;
+  right: max(2.5rem, calc((100vw - 1400px) / 2));
+  width: min(45vw, 600px);
+  height: calc(100vh - 6rem - 3rem);
   border-radius: 1.5rem;
-  overflow: hidden;
   box-shadow: 0 15px 30px rgba(15, 23, 42, 0.18);
   border: 4px solid #0f4f3a;
-  height: 100%;
+  overflow: hidden;
 }
 
 @media (min-width: 1024px) {
@@ -214,9 +216,15 @@
   }
 
   .mapShell {
-    height: auto;
-    max-height: 100vh;
-    height: 100%;
+    position: fixed;
+    top: 6rem;
+    right: max(2.5rem, calc((100vw - 1400px) / 2));
+    width: min(45vw, 600px);
+    height: calc(100vh - 6rem - 3rem);
+    border-radius: 1.5rem;
+    box-shadow: 0 15px 30px rgba(15, 23, 42, 0.18);
+    border: 4px solid #0f4f3a;
+    overflow: hidden;
   }
 }
 
