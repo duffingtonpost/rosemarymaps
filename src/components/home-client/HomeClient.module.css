@@ -27,7 +27,7 @@
 
 .cardGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  grid-template-columns: repeat(1, minmax(0, 1fr));
   gap: 1.5rem;
 }
 
@@ -191,6 +191,10 @@
   .mapColumn {
     flex: 0 0 38%;
   }
+
+  .cardGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 768px) {
@@ -199,12 +203,18 @@
   }
 
   .cardGrid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
   }
 
   .mapShell {
     position: relative;
     top: 0;
     min-height: 360px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .cardGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
